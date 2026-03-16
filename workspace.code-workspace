@@ -9,5 +9,8 @@
     {
       "path": "authentication-service",
     },
+    {
+      "path": "project",
+    },
   ],
 }

@@ -1,8 +1,8 @@
 /*
  * @Author: liweidong
  * @Date: 2026-03-12 14:08:47
- * @LastEditors: liweidong
- * @LastEditTime: 2026-03-12 17:43:11
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2026-03-14 21:24:59
  * @Description:
  */
 package main
@@ -15,6 +15,10 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	_ "github.com/jackc/pgconn"
+	_ "github.com/jackc/pgx/v4"
+	_ "github.com/jackc/pgx/v4/stdlib"
 )
 
 const webPort = "80"

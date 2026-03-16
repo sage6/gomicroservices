@@ -1,8 +1,6 @@
 /*
- * @Author: liweidong
- * @Date: 2026-03-12 16:12:29
- * @LastEditors: liweidong
- * @LastEditTime: 2026-03-12 17:31:42
+ * @Date: 2026-03-14 10:26:59
+ * @LastEditTime: 2026-03-14 22:36:58
  * @Description:
  */
 package main
@@ -10,6 +8,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -21,6 +20,7 @@ func (app *Config) Authenticate(w http.ResponseWriter, r *http.Request) {
 
 	err := app.readJSON(w, r, &requestPayload)
 	if err != nil {
+		log.Println("Error reading JSON:", err)
 		app.errorJSON(w, err, http.StatusBadRequest)
 		return
 	}
@@ -28,12 +28,14 @@ func (app *Config) Authenticate(w http.ResponseWriter, r *http.Request) {
 	// validate the user against the database
 	user, err := app.Models.User.GetByEmail(requestPayload.Email)
 	if err != nil {
+		log.Println("Error fetching user from database:", err)
 		app.errorJSON(w, errors.New("invalid credentials"), http.StatusBadRequest)
 		return
 	}
 
 	valid, err := user.PasswordMatches(requestPayload.Password)
 	if err != nil || !valid {
+		log.Println("Error validating password:", err)
 		app.errorJSON(w, errors.New("invalid credentials"), http.StatusBadRequest)
 		return
 	}

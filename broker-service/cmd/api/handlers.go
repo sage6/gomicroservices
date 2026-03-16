@@ -1,15 +1,21 @@
+/*
+ * @Date: 2026-03-14 10:26:59
+ * @LastEditTime: 2026-03-15 20:40:03
+ * @Description:
+ */
 package main
 
 import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 )
 
 type RequestPayload struct {
 	Action string      `json:"action"`
-	Auth   AuthPayload `json:"auth:omitempty"`
+	Auth   AuthPayload `json:"auth,omitempty"`
 }
 
 type AuthPayload struct {
@@ -37,6 +43,7 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Printf("Auth: %#v\n", requestPayload.Auth)
 	switch requestPayload.Action {
 	case "auth":
 		app.authenticate(w, requestPayload.Auth)
@@ -70,7 +77,7 @@ func (app *Config) authenticate(w http.ResponseWriter, a AuthPayload) {
 		app.errorJSON(w, errors.New("invalid credentials"))
 		return
 	} else if response.StatusCode != http.StatusAccepted {
-		app.errorJSON(w, error.New("error calling auth service"))
+		app.errorJSON(w, errors.New("error calling auth service"))
 		return
 	}
 
