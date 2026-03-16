@@ -6,6 +6,9 @@
 .vscode/
 
 
+authApp
+brokerApp
+frontApp
 project/db-data/
 
 
