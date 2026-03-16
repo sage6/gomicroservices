@@ -1,0 +1,12 @@
+# 系统文件
+.DS_Store
+
+
+# 个人开发配置
+.vscode/
+
+
+project/db-data/
+
+
+
