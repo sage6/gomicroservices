@@ -6,8 +6,9 @@
             <div class="col">
                 <h1 class="mt-5"> Test Microservices</h1>
                 <hr>
-                <a id="brokerBtn" class="bth btn-outline-secondary" href="javascript:void(0);"> Test Broker </a>
-                <a id="authBrokerBtn" class="bth btn-outline-secondary" href="javascript:void(0);"> Text Auth </a>
+                <a id="brokerBtn" class="btn btn-outline-secondary" href="javascript:void(0);"> Test Broker </a>
+                <a id="authBrokerBtn" class="btn btn-outline-secondary" href="javascript:void(0);"> Text Auth </a>
+                <a id="logBtn" class="btn btn-outline-secondary" href="javascript:void(0);"> Text Log</a>
 
                 <div id="output" class="mt-5" style="outline: 1px solid silver; padding: 2em;">
                     <span class="text-muted">Output shows here...</span>
@@ -38,6 +39,7 @@
         let out = document.getElementById("output")
         let sent = document.getElementById("payload")
         let received = document.getElementById("received")
+        let logBtn = document.getElementById("logBtn")
 
 
         authBrokerBtn.addEventListener("click", function() {
@@ -93,6 +95,41 @@
             .catch((error) => {
                 output.innerHTML += "<br><br>Error: " + error;
             })
+        })
+
+        logBtn.addEventListener("click", function() {
+            const payload = {
+                action: "log",
+                log: {
+                    name: "event",
+                    data: "Some kind of data"
+                }
+            }
+
+            const headers = new Headers();
+            headers.append("Content-Type", "application/json");
+
+            const body = {
+                method: "POST",
+                body: JSON.stringify(payload),
+                headers: headers,
+            }
+
+            fetch(`http://localhost:8080/handle`, body)
+            .then((response) => response.json()) 
+            .then((data) => {
+                sent.innerHTML = JSON.stringify(payload, undefined, 4);
+                received.innerHTML = JSON.stringify(data, undefined, 4);
+                if (data.error) {
+                    output.innerHTML += `<br><strong>Error:</strong> ${data.message}`;
+                } else {
+                    output.innerHTML += `<br><string>Response from broker service</strong>`
+                }
+            })
+            .catch((error) => {
+                output.innerHTML += `<br><br>Error: ${error}`
+            })
+
         })
 
     </script>
